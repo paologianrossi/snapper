@@ -9,9 +9,12 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Paolo Gianrossi"]
   spec.email         = ["paolino.gianrossi@gmail.com"]
 
-  spec.summary       = %q{A collection of tiny classes to do OO Rails.}
-  spec.description   = spec.summary
-  spec.homepage      = nil
+  spec.summary = %q{A collection of tiny classes to do OO Rails.}
+  spec.description = %q{Snapper is a lightweight framework for better
+  Ruby on Rails very heavily inspired by Trailblazer. It's mostly done
+  so that I can know what's going on down below in my stack, and for
+  educational purposes. You probably should use Trailblazer anyway.}
+  spec.homepage = nil
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
     f.match(%r{^(test|spec|features)/})
