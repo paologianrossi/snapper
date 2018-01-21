@@ -33,8 +33,12 @@ module Snapper
     def on_failure(*args)
     end
 
-    def output(key, value)
-      result[key] = value
+    def output(key, value=nil)
+      if block_given?
+        result[key] = yield(key, value)
+      else
+        result[key] = value
+      end
     end
 
     def process

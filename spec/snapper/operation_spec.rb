@@ -32,19 +32,37 @@ RSpec.describe Snapper::Operation do
   end
 
   context "when setting an on_success override" do
-    class TestOp
+    class TestOpSucc < TestOp
       def on_success(label)
         "#{label}: #{result.difference}"
       end
     end
 
     it "calls it when successful" do
-      result = TestOp.(5, 2)
+      result = TestOpSucc.(5, 2)
       expect(result.("label")).to eq "label: 3"
     end
 
     it "does not call it when unsuccessful" do
-      result = TestOp.(2, 5)
+      result = TestOpSucc.(2, 5)
+      expect(result.("label")).to be_nil
+    end
+  end
+
+  context "when setting an on_failure override" do
+    class TestOpFail < TestOp
+      def on_failure(label)
+        "#{label}: ERROR"
+      end
+    end
+
+    it "calls it when unsuccessful" do
+      result = TestOpFail.(2, 5)
+      expect(result.("label")).to eq "label: ERROR"
+    end
+
+    it "does not call it when successful" do
+      result = TestOpFail.(5, 2)
       expect(result.("label")).to be_nil
     end
   end
