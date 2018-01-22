@@ -40,5 +40,8 @@ module Snapper
       result.success?
     end
 
+    def model_name
+      model.model_name
+    end
   end
 end
