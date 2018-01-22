@@ -1,27 +1,43 @@
 # coding: utf-8
+
+require "dry-validation"
+
 module Snapper
   class Form
     attr_reader :model
+    attr_reader :errors
 
-    def initialize(model=nil, args={})
+    def initialize(model)
       @model = model
-      args.each do |k,v|
-        instance_variable_set("@#{k}", v) unless v.nil?
-      end
+      @errors = []
     end
 
-    def valid?
-      true
+    def self.field(field_name)
+      (@fields ||= []) << field_name
+      attr_accessor field_name
     end
 
-    def do!(what, *args, &blk)
-      self.__send__(what, *args, &blk)
+    def self.fields
+      @fields ||= []
     end
 
-    def do(what, *args, &blk)
-      if valid?
-        do!(what, *args, &blk)
-      end
+    def fields
+      Hash[
+        self.class.fields.map do |name|
+          [name, self.send(name)]
+        end
+      ]
+    end
+
+    def self.validation(&blk)
+      @schema = Dry::Validation.Schema(&blk)
+    end
+
+    def validate(params)
+      return true unless @schema
+      result = @schema.(params)
+      @errors = result.errors
+      result.success?
     end
 
   end
